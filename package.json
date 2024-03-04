@@ -1,0 +1,12 @@
+{
+  "name": "ignite-nodejs-01-fundamentos-nodejs-challenge",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "",
+  "main": "server.js",
+  "scripts": {
+    "dev": "node src/server.js"
+  },
+  "author": "",
+  "license": "ISC"
+}
