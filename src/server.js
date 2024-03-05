@@ -1,7 +1,6 @@
 import http from 'node:http'
 import { json } from './middlewares/json.js';
 
-
 const database = []
 
 const server = http.createServer(async (req, res) => {
@@ -24,7 +23,6 @@ const server = http.createServer(async (req, res) => {
     }
 
     database.push(task)
-    console.log(database)
 
     res.writeHead(201).end()
   }
