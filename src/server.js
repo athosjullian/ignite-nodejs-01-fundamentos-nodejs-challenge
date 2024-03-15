@@ -1,31 +1,33 @@
 import http from 'node:http'
 import { json } from './middlewares/json.js';
+import { routes } from './routes.js';
 
-const database = []
 
 const server = http.createServer(async (req, res) => {
   const { method, url } = req;
-
+  
   await json(req, res)
+  
+  const route = routes.find(route => {
+    return route.method === method && route.path.test(url)
+  })
 
-  if (method === 'GET' && url == '/tasks') {
-    res
-      .writeHead(200, { 'Content-Type': 'application/json' })
-      .end(JSON.stringify(database))
+  if (route) {
+    return route.handler(req, res)    
   }
 
-  if (method === 'POST' && url == '/tasks') {
-    const { name } = req.body
+  // if (method === 'POST' && url == '/tasks') {
+  //   const { name } = req.body
 
-    const task = {
-      "id": 1,
-      "name": name,
-    }
+  //   const task = {
+  //     "id": 1,
+  //     "name": name,
+  //   }
 
-    database.push(task)
+  //   database.insert('tasks', task);
 
-    res.writeHead(201).end()
-  }
+  //   res.writeHead(201).end()
+  // }
 
   res.end();
 })
