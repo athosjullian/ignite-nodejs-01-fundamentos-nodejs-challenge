@@ -29,7 +29,7 @@ export const routes = [
         "description": description,
         "completed_at": null,
         "created_at": new Date(),
-        "updated_at": null
+        "updated_at": new Date()
       }
 
       database.insert('tasks', task);
