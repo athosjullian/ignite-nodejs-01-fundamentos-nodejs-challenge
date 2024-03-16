@@ -2,6 +2,18 @@ import fs from 'node:fs/promises'
 
 const databasePath = new URL('../db.json', import.meta.url)
 
+// {
+//   "tasks": [
+//     {
+//       "task": 1
+//     },
+//     {
+//       "task": 2
+//     }
+//   ]
+// }
+
+
 export class Database {
   #database = {}
 
@@ -32,5 +44,15 @@ export class Database {
     }
 
     this.#persist()
+  }
+
+  delete(table, id) {
+    const index = this.#database[table].findIndex(item => item.id === id);
+
+    if (index > -1) {
+      this.#database[table].splice(index, 1);
+      this.#persist();
+      return // Item deleted successfully
+    }
   }
 }
