@@ -55,4 +55,27 @@ export class Database {
       return // Item deleted successfully
     }
   }
-}
+
+  update(table, id, data) {
+    let { title, description } = data
+    this.#database[table].find(item => {
+      if( item.id === id ) {
+        item.title = title ?? item.title
+        item.description = description ?? item.description
+        item.updated_at = new Date()
+
+        this.#persist();
+      }
+    })
+  }
+
+  // update(table, id, data) {
+  //   const rowIndex = this.#database[table].findIndex(row => row.id === id)
+
+  //   if (rowIndex > -1) {
+  //     const row = this.#database[table][rowIndex]
+  //     this.#database[table][rowIndex] = { id, ...row, ...data }
+  //     this.#persist()
+  //   }
+  // }
+} 

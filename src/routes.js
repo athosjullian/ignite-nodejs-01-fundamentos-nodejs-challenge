@@ -25,8 +25,8 @@ export const routes = [
 
       const task = {
         "id": uuid,
-        "title": title,
-        "description": description,
+        title,
+        description,
         "completed_at": null,
         "created_at": new Date(),
         "updated_at": new Date()
@@ -34,7 +34,7 @@ export const routes = [
 
       database.insert('tasks', task);
 
-      res.writeHead(201).end()
+      return res.writeHead(201).end()
     }
   },
   {
@@ -45,6 +45,34 @@ export const routes = [
 
       database.delete("tasks", id)
       
+      return res.writeHead(204).end()
+    }
+  },
+  {
+    method: "PUT",
+    path: buildRoutePath('/tasks/:id'),
+    handler: (req, res) => {
+      const { id } = req.params
+      const { ...data } = req.body
+
+      if (!data.title && !data.description) {
+        return res.writeHead(400).end(
+          JSON.stringify({message: "title or description are required"})
+        )
+      }
+
+      const [ task ] = database.select(table, { id })
+
+      if(!task) {
+        return res.writeHead(404).end()
+      }
+
+      database.update("tasks", id, {
+        title: title ?? task.title,
+        description: description ?? task.description,
+        updated_at: new Date()
+      })
+
       return res.writeHead(204).end()
     }
   }
