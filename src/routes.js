@@ -9,7 +9,11 @@ export const routes = [
     method: "GET",
     path: buildRoutePath('/tasks'),
     handler: (req, res) => {
-      const tasks = database.select('tasks')
+      const { search } = req.query
+      const tasks = database.select('tasks', {
+        title: search,
+        description: search
+      })
 
       res
         .writeHead(200, { 'Content-Type': 'application/json' })
@@ -74,6 +78,13 @@ export const routes = [
       })
 
       return res.writeHead(204).end()
+    }
+  },
+  {
+    method: "PATCH",
+    path: buildRoutePath('/tasks/:id/complete'),
+    handler: (req, res) => {
+      
     }
   }
 ]
