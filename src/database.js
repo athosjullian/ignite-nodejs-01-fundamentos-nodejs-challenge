@@ -35,8 +35,8 @@ export class Database {
 
     if(search) {
       data = data.filter(item => {
-        return Object.entries(search).some(([key, value]) => {
-          return item[key].includes(value)
+        return Object.entries(search).some(([ key, value ]) => {
+          return item[key].toLowerCase().includes(value.toLowerCase())
         })
       })
     }
@@ -65,25 +65,12 @@ export class Database {
   }
 
   update(table, id, data) {
-    let { title, description } = data
-    this.#database[table].find(item => {
-      if( item.id === id ) {
-        item.title = title ?? item.title
-        item.description = description ?? item.description
-        item.updated_at = new Date()
+    const index = this.#database[table].findIndex(item => item.id === id)
 
-        this.#persist();
-      }
-    })
+    if( index > -1 ) {
+      const row = this.#database[table][index]
+      this.#database[table][index] = { id, ...row,...data }
+      this.#persist()
+    }
   }
-
-  // update(table, id, data) {
-  //   const rowIndex = this.#database[table].findIndex(row => row.id === id)
-
-  //   if (rowIndex > -1) {
-  //     const row = this.#database[table][rowIndex]
-  //     this.#database[table][rowIndex] = { id, ...row, ...data }
-  //     this.#persist()
-  //   }
-  // }
 } 

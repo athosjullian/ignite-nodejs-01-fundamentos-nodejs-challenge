@@ -10,10 +10,11 @@ export const routes = [
     path: buildRoutePath('/tasks'),
     handler: (req, res) => {
       const { search } = req.query
-      const tasks = database.select('tasks', {
+
+      const tasks = database.select('tasks', search ? {
         title: search,
         description: search
-      })
+      }: null)
 
       res
         .writeHead(200, { 'Content-Type': 'application/json' })
@@ -84,7 +85,23 @@ export const routes = [
     method: "PATCH",
     path: buildRoutePath('/tasks/:id/complete'),
     handler: (req, res) => {
+      const { id } = req.params
       
+      const [ task ] = database.select('tasks', { id })
+
+      if (!task) {
+        return res.writeHead(404).end(
+          JSON.stringify({ message: "task not found" })
+        )
+      }
+
+      let completed_at = task.completed_at ? null : new Date()
+
+      database.update("tasks", id, {
+        completed_at
+      })
+
+      res.writeHead(201).end()
     }
   }
 ]
