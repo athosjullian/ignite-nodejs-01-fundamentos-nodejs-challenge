@@ -58,15 +58,15 @@ export const routes = [
     path: buildRoutePath('/tasks/:id'),
     handler: (req, res) => {
       const { id } = req.params
-      const { ...data } = req.body
+      const { title, description } = req.body
 
-      if (!data.title && !data.description) {
+      if (!title && !description) {
         return res.writeHead(400).end(
           JSON.stringify({message: "title or description are required"})
         )
       }
 
-      const [ task ] = database.select(table, { id })
+      const [ task ] = database.select('tasks', { id })
 
       if(!task) {
         return res.writeHead(404).end()
